@@ -18,6 +18,7 @@ app.engine('mustache', mustacheExpress());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'mustache');
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -52,22 +53,25 @@ next();
 });
 
 app.get('/login', function(req, res){
-    res.render('login', context);
+
   var context = {
     next: req.query.next
   };
-  if(req.session.user){
-    res.redirect('/stuff');
-  }
+    res.render('login', context);
+  // if(req.session.user){
+  //   res.redirect('/home');
+  // }
 });
 
 app.get('/login', function(req, res){
   var context = {
     'username' : req.session.user.username,
-    'views' : req.session.views
+    'views' : req.session.views['/']
   };
   res.render('index', context);
 });
+
+
 
 app.post('/login', function(req, res){
   var username = req.body.username;
@@ -83,18 +87,20 @@ app.post('/login', function(req, res){
     delete req.session.user;
   }
   if(req.session.user){
-    res.redirect('/home');
+    res.redirect('nextPage');
   }else{
     res.redirect('/login');
   }
 });
 
-app.get('/stuff', function(req, res){
-  res.send('empty space');
-});
-
 app.get('/home', function(req, res){
   res.send('hello!');
 });
+
+// app.get('/stuff', function(req, res){
+//   res.send('something');
+// });
+
+
 
 app.listen(3000);
