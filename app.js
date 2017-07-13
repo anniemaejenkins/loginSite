@@ -58,9 +58,9 @@ app.get('/login', function(req, res){
     next: req.query.next
   };
     res.render('login', context);
-  // if(req.session.user){
-  //   res.redirect('/home');
-  // }
+  if(req.session.user){
+    res.redirect('/home');
+  }
 });
 
 app.get('/login', function(req, res){
@@ -74,6 +74,7 @@ app.get('/login', function(req, res){
 
 
 app.post('/login', function(req, res){
+  console.log("annie");
   var username = req.body.username;
   var password = req.body.password;
   var nextPage = req.body.next;
@@ -87,17 +88,19 @@ app.post('/login', function(req, res){
     delete req.session.user;
   }
   if(req.session.user){
-    res.redirect('nextPage');
+    res.redirect('/home');
   }else{
     res.redirect('/login');
   }
 });
 
 app.get('/home', function(req, res){
-  res.send('hello!');
+  // console.log("hi");
+  res.send("Welcome home " + req.session.user.username + " !");
+  // res.render('home');
 });
 
-// app.get('/stuff', function(req, res){
+// app.get('/home', function(req, res){
 //   res.send('something');
 // });
 
